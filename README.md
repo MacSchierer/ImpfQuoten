@@ -2,7 +2,7 @@
 Ein Scriptable Widget zur Anzeige der gegen COVID-19 geimpften Personenzahl.
 Die Quote der Geimpften mit Bezug auf die Bevölkerung von Deutschland oder eines gewählten Bundeslands.
 Zusätzlich werden die Zahlen mit einem Fortschrittsbalken visualisiert.<br/>
-<img src="/img/pic1.png" width="400" /> &nbsp; <img src="img/pic2.png" width="400" /><br/><br/>
+<img src="/img/pic1.PNG" width="400" /> &nbsp; <img src="img/pic3.PNG" width="400" /><br/><br/>
 
 ## Verwendung
 
@@ -43,7 +43,7 @@ TH = Thüringen<br/>
 
 
 ## Beispiele
-<img src="img/pic3.png" width="400" /> &nbsp; <img src="img/pic4.jpg" width="400" /><br/><br/>
+<img src="img/pic2.PNG" width="400" /> &nbsp; <img src="img/pic4.PNG" width="400" /><br/><br/>
 
 ## Bekannte Probleme
 
