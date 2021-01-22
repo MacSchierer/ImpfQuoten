@@ -9,7 +9,7 @@ Zusätzlich werden die Zahlen mit einem Fortschrittsbalken visualisiert.<br/>
 * Download Scriptable App für iOS Geräte - https://scriptable.app
 * Download/Import der ImpfQuoten.js Datei nach iCloud/Scriptable
 * Auf dem Homescreen ein neues mittleres Scriptable Widget erstellen - Parameter für Bundesland optional<br/>
-<img src="img/widget1.jpg" width="320" /> &nbsp; <img src="img/widget2.jpg" width="320" /><br/><br/>
+<img src="img/widget1.png" width="400" /> &nbsp; <img src="img/widget2.png" width="400" /><br/><br/>
 Das Skript ist für kleine Widgets ausgelegt und wurde auf einem iPhone 12Pro, Xs und SE getestet.
 Auf anderen Geräten kann es ggf. zu Abweichungen in der Darstellung kommen.
 
@@ -49,7 +49,7 @@ TH = Thüringen<br/>
 
 * Fortschrittsbalken wechselt nicht direkt in das zugehörige Erscheinungsbild (hell/dunkel)
 * Tritt ein Fehler beim Datenabruf auf, wird eine Fehlermeldung angezeigt:<br/>
-<img src="img/error.jpg" width="320" /><br/><br/>
+<img src="img/error.png" width="400" /><br/><br/>
 
 ## Changelog
 * v1.0 Release GitHub
