@@ -10,8 +10,8 @@ Zusätzlich werden die Zahlen mit einem Fortschrittsbalken visualisiert.<br/>
 * Download/Import der ImpfQuoten.js Datei nach iCloud/Scriptable
 * Auf dem Homescreen ein neues mittleres Scriptable Widget erstellen - Parameter für Bundesland optional<br/>
 <img src="img/widget1.png" width="400" /> &nbsp; <img src="img/widget2.png" width="400" /><br/><br/>
-Das Skript ist für kleine Widgets ausgelegt und wurde auf einem iPhone 12Pro, Xs und SE getestet.
-Auf anderen Geräten kann es ggf. zu Abweichungen in der Darstellung kommen.
+Das Skript ist aktuell für die mittlere Widgetgröße ausgelegt und wurde auf einem iPhone 12Pro, Xs getestet.
+Auf anderen Geräten oder Widgetgrößen kann es ggf. zu Abweichungen in der Darstellung kommen.
 
 
 ## Features
@@ -20,7 +20,7 @@ Auf anderen Geräten kann es ggf. zu Abweichungen in der Darstellung kommen.
 * Als Basis der Quelle dient: https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/Impfquoten-Tab.html
 * Über den Parameter des Widgets kann ein Bundesland vorgegben werden. Kürzel nach ISO 3166-2:DE
 * Wechselt gemäß der Geräteeinstellung automatisch in den Darkmode
-* Individuelle Farbstufen für die Impfquote: Rot = Step1st < 25%, Grün = Step2nd > 65%, Dazwischen Orange
+* Individuelle Farbstufen für die Impfquote: Rot = Step1st < 20%, Grün = Step2nd > 60%, Dazwischen Orange, Ziel = 70% Herdenimunität
 * Auswahl des Farbthemes über die Variable "WidgetTheme": "default" enspricht "Hell & Dunkel", "color" entspricht "Farbiger Hintergrund & Dunkel"
 
 ## Kürzel für den Parameter des Widgets
