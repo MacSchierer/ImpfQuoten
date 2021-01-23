@@ -8,7 +8,7 @@
 // Zusätzlich werden die Zahlen mit einem Fortschrittsbalken visualisiert.
 // Konfiguriert als Widget Medium. Schaltet automatisch auch in den DarkMode.
 //
-// Script by MacSchierer, 22.01.2021, v1.0
+// Script by MacSchierer, 23.01.2021, v1.1
 // Download der aktuellen Version hier: GitHub https://github.com/MacSchierer/ImpfQuote
 // 
 // Verwendet die bereitgestellte JSON API von ThisIsBenny GitHub
@@ -24,6 +24,7 @@ const Step1st = 20
 const Step2nd = 60
 const StepFin = 70
 
+config.widgetFamily = config.widgetFamily || 'medium'
 //
 // Ab hier nichts ändern
 //
@@ -101,6 +102,7 @@ SubTextColor = Color.dynamic(new Color("#666666"), new Color("#aaaaaa"))
 TitelColor = MainTextColor
 BarTextColor1 = Color.dynamic(new Color("#ffffff"), new Color("#000000"))
 BarTextColor2 = Color.dynamic(new Color("#000000"), new Color("#ffffff"))
+BarStrokeColor = new Color("#efefef")
 
 //Vacc1st = 59058972
 //Quote1st = 65.58
@@ -114,80 +116,93 @@ if (hasError == true) {
 	widget.presentMedium()
 	Script.complete()	
 } else { 
-	if (config.runsInWidget || true) {
-		const widget = new ListWidget()
-		widget.backgroundColor = WidgetBgColor
+	
+	const widget = new ListWidget()
+	widget.backgroundColor = WidgetBgColor
+	if (config.widgetFamily == 'small') {
+		widget.setPadding(10, 10, 10, 10)
+	}
+	else {
 		widget.setPadding(15, 15, 15, 15)
-		const Title = widget.addStack()  
-		let TitleText = Title.addText("COVID-19 Impfungen")
-			TitleText.textColor = TitelColor
-			TitleText.font = Font.boldSystemFont(12)
-			TitleText.centerAlignText()
-			TitleText.minimumScaleFactor = 0.5
-		Title.addSpacer()	
+	}	
+	const Title = widget.addStack()  
+	let TitleText = Title.addText("COVID-19 Impfungen")
+		TitleText.textColor = TitelColor
+		TitleText.font = Font.boldSystemFont(12)
+		TitleText.minimumScaleFactor = 0.5
+		TitleText.lineLimit = 1
+	Title.addSpacer()	
+	widget.borderWidth = 1
+	widget.borderColor = MainTextColor
+	if (config.widgetFamily == 'medium') {
 		let DateText = Title.addDate(new Date(AllItems.lastUpdate))
 			DateText.textColor = SubTextColor
 			DateText.applyDateStyle()
 			DateText.font = Font.boldSystemFont(8)		
-		const SubTitle = widget.addStack()  
-		let SubTitleText = SubTitle.addText(RegionName)
-			SubTitleText.font = Font.systemFont(10)
-			SubTitleText.textColor = SubTextColor
-			SubTitleText.lineLimit = 1
-		widget.addSpacer(2)	
-		
-		const Content = widget.addStack() 
-		Content.setPadding(2,2,2,2)
-		Content.layoutHorizontally()
-		
-			const Stack1 = Content.addStack() 
-				Stack1.layoutVertically()
-				Stack1.backgroundColor = ContentBGColor		
-				Stack1.cornerRadius = 4
-				Stack1.setPadding(4,4,4,4)
-				const Stack1Head = Stack1.addStack() 	
-					Stack1Head.addSpacer()
-					let Title1stText = Stack1Head.addText("Erstimpfung")
-						Title1stText.textColor = MainTextColor
-						Title1stText.font = Font.boldSystemFont(14)
-					Stack1Head.addSpacer()
-				Stack1.addSpacer(4)
-				const Stack1Vacc = Stack1.addStack()
-					Stack1Vacc.addSpacer()
-					let Vacc1stText = Stack1Vacc.addText(Vacc1st.toLocaleString('de-DE'))
-						Vacc1stText.textColor = MainTextColor
-						Vacc1stText.font = Font.boldSystemFont(14)
-					Stack1Vacc.addSpacer()	
-				const Stack1Diff = Stack1.addStack()
-					Stack1Diff.addSpacer()
-					let Diff1stText = Stack1Diff.addText("+" + Diff1st.toLocaleString('de-DE'))
-						Diff1stText.textColor  = SubTextColor
-						Diff1stText.font = Font.systemFont(12)
-					Stack1Diff.addSpacer()
-				Stack1.addSpacer(4)
-				const Stack1Percent = Stack1.addStack()	
-				Stack1Percent.layoutHorizontally()
-				Stack1Percent.centerAlignContent()
-				Stack1Percent.addSpacer()
-					let Quote1stText = Stack1Percent.addText(Quote1st.toLocaleString('de-DE'))
-						Quote1stText.textColor = MainTextColor
-						Quote1stText.font = Font.boldSystemFont(28)
-						Quote1stEin = Stack1Percent.addText("%")
-						Quote1stEin.textColor = SubTextColor
-						Quote1stEin.font = Font.systemFont(14)	
-				Stack1Percent.addSpacer()		
-			Stack1.addSpacer()
-		Content.addSpacer()
-		const BarContent1 = Content.addStack() 
-		BarContent1.layoutVertically()	
-			const progressBar1st = BarContent1.addImage(creatProgress(Quote1st))
-			progressBar1st.imageSize = new Size(BarWidth, BarHeigth)
-		
-		Content.addSpacer()		
+	}
+	const SubTitle = widget.addStack()  
+	let SubTitleText = SubTitle.addText(RegionName)
+		SubTitleText.font = Font.systemFont(10)
+		SubTitleText.textColor = SubTextColor
+		SubTitleText.lineLimit = 1
+	widget.addSpacer(2)	
+	
+	const Content = widget.addStack() 
+	Content.setPadding(2,2,2,2)
+	Content.layoutHorizontally()
+	
+		const Stack1 = Content.addStack() 
+			Stack1.layoutVertically()
+			Stack1.backgroundColor = ContentBGColor		
+			Stack1.cornerRadius = 4
+			Stack1.setPadding(4,4,4,4)
+			const Stack1Head = Stack1.addStack() 	
+				Stack1Head.addSpacer()
+				let Title1stText = Stack1Head.addText("Erstimpfung")
+					Title1stText.textColor = MainTextColor
+					Title1stText.font = Font.boldSystemFont(14)
+					Title1stText.minimumScaleFactor = 0.5
+				Stack1Head.addSpacer()
+			Stack1.addSpacer(4)
+			const Stack1Vacc = Stack1.addStack()
+				Stack1Vacc.addSpacer()
+				let Vacc1stText = Stack1Vacc.addText(Vacc1st.toLocaleString('de-DE'))
+					Vacc1stText.textColor = MainTextColor
+					Vacc1stText.font = Font.boldSystemFont(14)
+				Stack1Vacc.addSpacer()	
+			const Stack1Diff = Stack1.addStack()
+				Stack1Diff.addSpacer()
+				let Diff1stText = Stack1Diff.addText("+" + Diff1st.toLocaleString('de-DE'))
+					Diff1stText.textColor  = SubTextColor
+					Diff1stText.font = Font.systemFont(12)
+				Stack1Diff.addSpacer()
+			Stack1.addSpacer(4)
+			const Stack1Percent = Stack1.addStack()	
+			Stack1Percent.layoutHorizontally()
+			Stack1Percent.centerAlignContent()
+			Stack1Percent.addSpacer()
+				let Quote1stText = Stack1Percent.addText(Quote1st.toLocaleString('de-DE'))
+					Quote1stText.textColor = MainTextColor
+					Quote1stText.font = Font.boldSystemFont(28)
+					Quote1stEin = Stack1Percent.addText("%")
+					Quote1stEin.textColor = SubTextColor
+					Quote1stEin.font = Font.systemFont(14)	
+			Stack1Percent.addSpacer()		
+		Stack1.addSpacer()
+	Content.addSpacer()
+	const BarContent1 = Content.addStack() 
+	BarContent1.layoutVertically()	
+		const progressBar1st = BarContent1.addImage(creatProgress(Quote1st))
+		progressBar1st.cornerRadius = 4
+		progressBar1st.imageSize = new Size(BarWidth, BarHeigth)
 
+	if (config.widgetFamily == 'medium') {	
+		Content.addSpacer()		
+	
 		const BarContent2 = Content.addStack() 
 		BarContent2.layoutVertically()	
 			const progressBar2nd = BarContent2.addImage(creatProgress(Quote2nd))
+			progressBar2nd.cornerRadius = 4
 			progressBar2nd.imageSize = new Size(BarWidth, BarHeigth)
 		Content.addSpacer()		
 		
@@ -228,15 +243,17 @@ if (hasError == true) {
 						Quote2ndEin.font = Font.systemFont(14)	
 				Stack2Percent.addSpacer()		
 			Stack2.addSpacer()
-
-		// Ausgabe		
-		Script.setWidget(widget)
-		widget.presentMedium()
+	}
+	// Ausgabe		
+	if (!config.runsInWidget) {
+		  switch (config.widgetFamily) {
+			case 'small': await widget.presentSmall(); break;
+			case 'medium': await widget.presentMedium(); break;
+		  }
+		} else {
+		  Script.setWidget(widget)
+		}
 		Script.complete()
-	}
-	else {
-		Script.complete()	
-	}
 }
 
 //
@@ -279,10 +296,13 @@ function creatProgress(BarValue) {
 	context.opaque = false
 	context.respectScreenScale = true
 	// BG
-	context.setFillColor(ContentBGColor)
 	const path = new Path()
-	path.addRoundedRect(new Rect(0, 0, BarWidth, BarHeigth),2,2)
+	path.addRoundedRect(new Rect(0, 0, BarWidth, BarHeigth),4,4)
 	context.addPath(path)
+	//context.setLineWidth(2)
+	//context.setStrokeColor(ContentBGColor)
+	//context.strokePath()
+	context.setFillColor(ContentBGColor)
 	context.fillPath()
 	// BarValue
 	if (BarValue < Step1st) {
