@@ -9,7 +9,7 @@
 // Konfiguriert als Widget Medium. Schaltet automatisch auch in den DarkMode.
 //
 // Script by MacSchierer, 23.01.2021, v1.1
-// Download der aktuellen Version hier: GitHub https://github.com/MacSchierer/ImpfQuote
+// Download der aktuellen Version hier: GitHub https://github.com/MacSchierer/ImpfQuoten
 // 
 // Verwendet die bereitgestellte JSON API von ThisIsBenny GitHub
 // https://github.com/ThisIsBenny/rki-vaccination-data
