@@ -1,9 +1,13 @@
 # ImpfQuoten, Ein Scriptable Widget
 Ein Scriptable Widget zur Anzeige der gegen COVID-19 geimpften Personenzahl.
-Die Quote der Geimpften mit Bezug auf die Bevölkerung von Deutschland oder eines gewählten Bundeslands.
-Zusätzlich werden die Zahlen mit einem Fortschrittsbalken visualisiert.<br/>
+Die Quote der Geimpften mit Bezug auf die Bevölkerung von Deutschland oder eines gewählten Bundeslands.<br/>
+Zusätzlich werden die Zahlen mit einem Fortschrittsbalken visualisiert.<br/><br/>
 <img src="/img/pic1.PNG" width="400" /> &nbsp; <img src="img/pic3.PNG" width="400" /><br/><br/>
 <img src="img/pic5.png" width="250" /><br/><br/>
+Zahlen zur Erst- und Zweitimpfung mit je:<br/>
+- Anzahl der Geimpften <br/>
+- Differenz zum Vortag <br/>
+- Prozentsatz mit Bezug auf die Bevölkerung<br/>
 
 ## Verwendung
 
