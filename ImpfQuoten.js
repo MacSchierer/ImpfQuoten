@@ -91,7 +91,7 @@ try {
 	log("Stand: " + AllItems.lastUpdate)
 } catch (e) {
 	hasError = true
-	ErrorTxt += "Beim Verarbeiten der Daten ist ein fehler aufgetreten." 
+	ErrorTxt += "Beim Verarbeiten der Daten ist ein Fehler aufgetreten." 
 }	
 
 // Fraben definieren	
