@@ -8,8 +8,8 @@
 // Zusätzlich werden die Zahlen mit einem Fortschrittsbalken visualisiert.
 // Konfiguriert als Widget Medium. Schaltet automatisch auch in den DarkMode.
 //
-// Script by MacSchierer, 23.01.2021, v1.1
-// Download der aktuellen Version hier: GitHub https://github.com/MacSchierer/ImpfQuoten
+// Script by MacSchierer, 26.01.2021, v1.2
+// Download der aktuellen Version hier: GitHub https://github.com/MacSchierer/ImpfQuote
 // 
 // Verwendet die bereitgestellte JSON API von ThisIsBenny GitHub
 // https://github.com/ThisIsBenny/rki-vaccination-data
@@ -95,19 +95,13 @@ try {
 }	
 
 // Fraben definieren	
-WidgetBgColor = Color.dynamic(new Color("#ffffff"), new Color("#000000"))	
+WidgetBgColor = Color.dynamic(new Color("#fefefe"), new Color("#1e1e1e"))	
 ContentBGColor = Color.dynamic(new Color("#efefef"), new Color("#444444"))	
 MainTextColor = Color.dynamic(new Color("#000000"), new Color("#ffffff"))
 SubTextColor = Color.dynamic(new Color("#666666"), new Color("#aaaaaa"))
 TitelColor = MainTextColor
 BarTextColor1 = Color.dynamic(new Color("#ffffff"), new Color("#000000"))
 BarTextColor2 = Color.dynamic(new Color("#000000"), new Color("#ffffff"))
-BarStrokeColor = new Color("#efefef")
-
-//Vacc1st = 59058972
-//Quote1st = 65.58
-//Quote2nd = 12.99
-
 
 // Ausgabe aufgelaufene Fehler oder Widget
 if (hasError == true) {
@@ -181,7 +175,7 @@ if (hasError == true) {
 			Stack1Percent.layoutHorizontally()
 			Stack1Percent.centerAlignContent()
 			Stack1Percent.addSpacer()
-				let Quote1stText = Stack1Percent.addText(Quote1st.toLocaleString('de-DE'))
+				let Quote1stText = Stack1Percent.addText((Quote1st.toLocaleString('de-DE')).replace('.', ','))
 					Quote1stText.textColor = MainTextColor
 					Quote1stText.font = Font.boldSystemFont(28)
 					Quote1stEin = Stack1Percent.addText("%")
@@ -205,7 +199,6 @@ if (hasError == true) {
 			progressBar2nd.cornerRadius = 4
 			progressBar2nd.imageSize = new Size(BarWidth, BarHeigth)
 		Content.addSpacer()		
-		
 			const Stack2 = Content.addStack() 
 				Stack2.layoutVertically()
 				Stack2.backgroundColor = ContentBGColor		
@@ -235,7 +228,7 @@ if (hasError == true) {
 				Stack2Percent.layoutHorizontally()
 				Stack2Percent.centerAlignContent()
 				Stack2Percent.addSpacer()
-					let Quote2ndText = Stack2Percent.addText(Quote2nd.toLocaleString('de-DE'))
+					let Quote2ndText = Stack2Percent.addText((Quote2nd.toLocaleString('de-DE')).replace('.', ','))
 						Quote2ndText.textColor = MainTextColor
 						Quote2ndText.font = Font.boldSystemFont(28)
 						Quote2ndEin = Stack2Percent.addText("%")
@@ -299,9 +292,6 @@ function creatProgress(BarValue) {
 	const path = new Path()
 	path.addRoundedRect(new Rect(0, 0, BarWidth, BarHeigth),4,4)
 	context.addPath(path)
-	//context.setLineWidth(2)
-	//context.setStrokeColor(ContentBGColor)
-	//context.strokePath()
 	context.setFillColor(ContentBGColor)
 	context.fillPath()
 	// BarValue
