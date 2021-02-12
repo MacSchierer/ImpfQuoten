@@ -18,7 +18,8 @@ Zahlen zur Erst- und Zweitimpfung mit je:<br/>
 Das Skript ist aktuell für die mittlere Widgetgröße ausgelegt und wurde auf einem iPhone 12Pro, Xs getestet.
 Wird das Skript in einem kleinen Widget verwendet, wird die Anzeige auf die Erstimpfungen reduziert.
 Auf anderen Geräten oder Widgetgrößen kann es ggf. zu Abweichungen in der Darstellung kommen.
-
+Alternativ kann das Scritp vie ScriptDude installiert werden.
+<a href="https://scriptdu.de/?name=ImpfQuoten&source=https%3A%2F%2Fraw.githubusercontent.com%2FMacSchierer%2FImpfQuoten%2Fmain%2FImpfQuoten.js&docs=https%3A%2F%2Fgithub.com%2FMacSchierer%2FImpfQuoten%2Fblob%2Fmain%2FREADME.md#generator"><img alt="Download with ScriptDude" src="https://scriptdu.de/download.svg"></a>
 
 ## Features
 
