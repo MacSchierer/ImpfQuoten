@@ -58,6 +58,7 @@ TH = Thüringen<br/>
 <img src="img/error.png" width="400" /><br/><br/>
 
 ## Changelog
+* v1.3 Impfquoten angepasst, API V2 - https://github.com/ThisIsBenny/rki-vaccination-data
 * v1.2 Kleine Korrekturen: Farben, Dezimaltrenner
 * v1.1 Anzeige der Erstimpfungen als kleines Widget
 * v1.0 Release GitHub
