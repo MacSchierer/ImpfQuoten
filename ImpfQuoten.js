@@ -8,7 +8,7 @@
 // Zusätzlich werden die Zahlen mit einem Fortschrittsbalken visualisiert.
 // Konfiguriert als Widget Medium. Schaltet automatisch auch in den DarkMode.
 //
-// Script by MacSchierer, 26.01.2021, v1.2
+// Script by MacSchierer, 08.08.2021, v1.3
 // Download der aktuellen Version hier: GitHub https://github.com/MacSchierer/ImpfQuote
 // 
 // Verwendet die bereitgestellte JSON API von ThisIsBenny GitHub
@@ -19,16 +19,16 @@
 //
 
 // Individuelle Farbstufen für die Impfquote:
-// Rot = Step1st < 20, Grün = Step2nd > 60, Dazwischen Orange, Ziel > 70 = Herdenimunität
+// Rot = Step1st < 20, Grün = Step2nd > 85, Dazwischen Orange, Ziel > 85 = Herdenimunität
 const Step1st = 20
-const Step2nd = 60
-const StepFin = 70
+const Step2nd = 85
+const StepFin = 100
 
 config.widgetFamily = config.widgetFamily || 'medium'
 //
 // Ab hier nichts ändern
 //
-let APIurl = "https://rki-vaccination-data.vercel.app/api"
+let APIurl = "https://rki-vaccination-data.vercel.app/api/v2"
 let hasError = false
 let ErrorTxt = ""  
 let RegionKey= "Deutschland"
@@ -37,7 +37,7 @@ const BarWidth = 15
 const BarHeigth = 105
 
 let param = args.widgetParameter 	// Abfrage des Parameters vom Widget
-// let param = "Mv" // Debug
+//  param = "Mv" // Debug
 if (param != null && param.length > 0) {
 	param = param.toLowerCase()
 	if (setRegionKey(param) != false) {
@@ -57,37 +57,30 @@ try {
 }
 	
 try {
+	for (const key in AllItems.data) {
+		//console.log(`${key}: ${AllItems.data[key].name}`);
+		if (RegionKey == AllItems.data[key].name) {
+			MyKey = [key, AllItems.data[key].name]
+		}
+	}
 	// Daten der Region zuordnen
-	if (RegionKey == "Deutschland") {
-		Citizen = AllItems.total 
-		Vacc1st = AllItems.vaccinated	
-		Vacc2nd = AllItems['2nd_vaccination'].vaccinated
-		Quote1st = (Vacc1st/AllItems.total*100).toFixed(2)
-		Quote2nd = (Vacc2nd/AllItems.total*100).toFixed(2)
-		Diff1st = AllItems.difference_to_the_previous_day
-		Diff2nd = AllItems['2nd_vaccination'].difference_to_the_previous_day
-		Vacc1k = AllItems.vaccinations_per_1000_inhabitants
-		RegionName = RegionKey
-	}
-	else {
-		Citizen = AllItems.states[RegionKey].total 
-		Vacc1st = AllItems.states[RegionKey].vaccinated
-		Vacc2nd = AllItems.states[RegionKey]['2nd_vaccination'].vaccinated
-		Quote1st = (Vacc1st/AllItems.states[RegionKey].total*100).toFixed(2)
-		Quote2nd = (Vacc2nd/AllItems.states[RegionKey].total*100).toFixed(2)
-		Diff1st = AllItems.states[RegionKey].difference_to_the_previous_day
-		Diff2nd = AllItems.states[RegionKey]['2nd_vaccination'].difference_to_the_previous_day	
-		Vacc1k = AllItems.states[RegionKey].vaccinations_per_1000_inhabitants
-		RegionName = RegionKey
-	}
-	log("Region: " + RegionKey)
+	Citizen = AllItems.data[MyKey[0]].inhabitants
+	Vacc1st = AllItems.data[MyKey[0]].vaccinatedAtLeastOnce.doses
+	Vacc2nd = AllItems.data[MyKey[0]].fullyVaccinated.doses
+	Quote1st = AllItems.data[MyKey[0]].vaccinatedAtLeastOnce.quote
+	Quote2nd = AllItems.data[MyKey[0]].fullyVaccinated.quote
+	Diff1st = AllItems.data[MyKey[0]].vaccinatedAtLeastOnce.differenceToThePreviousDay
+	Diff2nd = AllItems.data[MyKey[0]].fullyVaccinated.differenceToThePreviousDay
+	RegionName = MyKey[1]
+
+
+	log("Region: " + RegionName)
 	log("Geimpft 1st: " + Vacc1st)
 	log("Geimpft 2nd: " + Vacc2nd)
 	log("Diff. 1st: +" + Diff1st)
 	log("Diff. 2nd: +" + Diff2nd)
 	log("Quote 1st: " + Quote1st + "%")
 	log("Quote 2nd: " + Quote2nd + "%")
-	log("pro 1000: " + Vacc1k)
 	log("Stand: " + AllItems.lastUpdate)
 } catch (e) {
 	hasError = true
