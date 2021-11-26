@@ -16,10 +16,7 @@ Zahlen zur Erst- und Zweitimpfung mit je:<br/>
 * Auf dem Homescreen ein neues mittleres Scriptable Widget erstellen - Parameter für Bundesland optional<br/>
 <img src="img/widget1.png" width="300" /> &nbsp; <img src="img/widget2.png" width="300" /><br/><br/>
 Das Skript ist aktuell für die mittlere Widgetgröße ausgelegt und wurde auf einem iPhone 12Pro, Xs getestet.
-Wird das Skript in einem kleinen Widget verwendet, wird die Anzeige auf die Erstimpfungen reduziert.
 Auf anderen Geräten oder Widgetgrößen kann es ggf. zu Abweichungen in der Darstellung kommen.
-Alternativ kann das Scritp vie ScriptDude installiert werden.<br/>
-<a href="https://scriptdu.de/?name=ImpfQuoten&source=https%3A%2F%2Fraw.githubusercontent.com%2FMacSchierer%2FImpfQuoten%2Fmain%2FImpfQuoten.js&docs=https%3A%2F%2Fgithub.com%2FMacSchierer%2FImpfQuoten%2Fblob%2Fmain%2FREADME.md#generator"><img alt="Download with ScriptDude" src="https://scriptdu.de/download.svg"></a>
 
 ## Features
 
@@ -27,7 +24,7 @@ Alternativ kann das Scritp vie ScriptDude installiert werden.<br/>
 * Als Basis der Quelle dient: https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/Impfquoten-Tab.html
 * Über den Parameter des Widgets kann ein Bundesland vorgegben werden. Kürzel nach ISO 3166-2:DE
 * Wechselt gemäß der Geräteeinstellung automatisch in den Darkmode
-* Individuelle Farbstufen für die Impfquote: Rot = Step1st < 20%, Grün = Step2nd > 60%, Dazwischen Orange, Ziel = 70% Herdenimunität
+* Individuelle Farbstufen für die Impfquote: Rot = Step1st < 25%, Grün = Step2nd > 60%, Dazwischen Orange, Ziel = 70% Herdenimunität
 
 ## Kürzel für den Parameter des Widgets
 BW = Baden-Württemberg<br/>
@@ -58,6 +55,7 @@ TH = Thüringen<br/>
 <img src="img/error.png" width="400" /><br/><br/>
 
 ## Changelog
+* v2.0 Anzeige: Impfquote vollständig geimpft, Impfquote Auffrischimpfung 
 * v1.3 Impfquoten angepasst, API V2 - https://github.com/ThisIsBenny/rki-vaccination-data
 * v1.2 Kleine Korrekturen: Farben, Dezimaltrenner
 * v1.1 Anzeige der Erstimpfungen als kleines Widget
