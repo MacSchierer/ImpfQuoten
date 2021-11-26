@@ -8,23 +8,22 @@
 // Zusätzlich werden die Zahlen mit einem Fortschrittsbalken visualisiert.
 // Konfiguriert als Widget Medium. Schaltet automatisch auch in den DarkMode.
 //
-// Script by MacSchierer, 08.08.2021, v1.3
+// Script by MacSchierer, 26.11.2021, v2.0
 // Download der aktuellen Version hier: GitHub https://github.com/MacSchierer/ImpfQuote
 // 
 // Verwendet die bereitgestellte JSON API von ThisIsBenny GitHub
 // https://github.com/ThisIsBenny/rki-vaccination-data
 // Datenbasis: https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/Impfquoten-Tab.html
+
 //
 // Optionale Konfiguration
 //
-
 // Individuelle Farbstufen für die Impfquote:
-// Rot = Step1st < 20, Grün = Step2nd > 85, Dazwischen Orange, Ziel > 85 = Herdenimunität
-const Step1st = 20
+// Rot = Step1st < 25, Grün = Step2nd > 85, Dazwischen Orange, Ziel > 85 = "Herdenimmunität"
+const Step1st = 25
 const Step2nd = 85
 const StepFin = 100
 
-config.widgetFamily = config.widgetFamily || 'medium'
 //
 // Ab hier nichts ändern
 //
@@ -65,22 +64,22 @@ try {
 	}
 	// Daten der Region zuordnen
 	Citizen = AllItems.data[MyKey[0]].inhabitants
-	Vacc1st = AllItems.data[MyKey[0]].vaccinatedAtLeastOnce.doses
-	Vacc2nd = AllItems.data[MyKey[0]].fullyVaccinated.doses
-	Quote1st = AllItems.data[MyKey[0]].vaccinatedAtLeastOnce.quote
-	Quote2nd = AllItems.data[MyKey[0]].fullyVaccinated.quote
-	Diff1st = AllItems.data[MyKey[0]].vaccinatedAtLeastOnce.differenceToThePreviousDay
-	Diff2nd = AllItems.data[MyKey[0]].fullyVaccinated.differenceToThePreviousDay
+	VaccFull = AllItems.data[MyKey[0]].fullyVaccinated.doses
+	VaccBooster = AllItems.data[MyKey[0]].boosterVaccinated.doses
+	QuoteFull = AllItems.data[MyKey[0]].fullyVaccinated.quote
+	QuoteBooster = AllItems.data[MyKey[0]].boosterVaccinated.quote
+	DiffFull = AllItems.data[MyKey[0]].fullyVaccinated.differenceToThePreviousDay
+	DiffBooster = AllItems.data[MyKey[0]].boosterVaccinated.differenceToThePreviousDay
 	RegionName = MyKey[1]
 
 
 	log("Region: " + RegionName)
-	log("Geimpft 1st: " + Vacc1st)
-	log("Geimpft 2nd: " + Vacc2nd)
-	log("Diff. 1st: +" + Diff1st)
-	log("Diff. 2nd: +" + Diff2nd)
-	log("Quote 1st: " + Quote1st + "%")
-	log("Quote 2nd: " + Quote2nd + "%")
+	log("Vollständig geimpft: " + VaccFull)
+	log("Auffrischimpfung: " + VaccBooster)
+	log("Diff. 1st: +" + DiffFull)
+	log("Diff. 2nd: +" + DiffBooster)
+	log("Quote Full: " + QuoteFull + "%")
+	log("Quote Booster: " + QuoteBooster + "%")
 	log("Stand: " + AllItems.lastUpdate)
 } catch (e) {
 	hasError = true
@@ -106,12 +105,7 @@ if (hasError == true) {
 	
 	const widget = new ListWidget()
 	widget.backgroundColor = WidgetBgColor
-	if (config.widgetFamily == 'small') {
-		widget.setPadding(10, 10, 10, 10)
-	}
-	else {
-		widget.setPadding(15, 15, 15, 15)
-	}	
+	widget.setPadding(15, 15, 15, 15)
 	const Title = widget.addStack()  
 	let TitleText = Title.addText("COVID-19 Impfungen")
 		TitleText.textColor = TitelColor
@@ -121,12 +115,10 @@ if (hasError == true) {
 	Title.addSpacer()	
 	widget.borderWidth = 1
 	widget.borderColor = MainTextColor
-	if (config.widgetFamily == 'medium') {
-		let DateText = Title.addDate(new Date(AllItems.lastUpdate))
-			DateText.textColor = SubTextColor
-			DateText.applyDateStyle()
-			DateText.font = Font.boldSystemFont(8)		
-	}
+	let DateText = Title.addDate(new Date(AllItems.lastUpdate))
+		DateText.textColor = SubTextColor
+		DateText.applyDateStyle()
+		DateText.font = Font.boldSystemFont(8)		
 	const SubTitle = widget.addStack()  
 	let SubTitleText = SubTitle.addText(RegionName)
 		SubTitleText.font = Font.systemFont(10)
@@ -138,108 +130,103 @@ if (hasError == true) {
 	Content.setPadding(2,2,2,2)
 	Content.layoutHorizontally()
 	
-		const Stack1 = Content.addStack() 
-			Stack1.layoutVertically()
-			Stack1.backgroundColor = ContentBGColor		
-			Stack1.cornerRadius = 4
-			Stack1.setPadding(4,4,4,4)
-			const Stack1Head = Stack1.addStack() 	
-				Stack1Head.addSpacer()
-				let Title1stText = Stack1Head.addText("Erstimpfung")
-					Title1stText.textColor = MainTextColor
-					Title1stText.font = Font.boldSystemFont(14)
-					Title1stText.minimumScaleFactor = 0.5
-				Stack1Head.addSpacer()
-			Stack1.addSpacer(4)
-			const Stack1Vacc = Stack1.addStack()
-				Stack1Vacc.addSpacer()
-				let Vacc1stText = Stack1Vacc.addText(Vacc1st.toLocaleString('de-DE'))
-					Vacc1stText.textColor = MainTextColor
-					Vacc1stText.font = Font.boldSystemFont(14)
-				Stack1Vacc.addSpacer()	
-			const Stack1Diff = Stack1.addStack()
-				Stack1Diff.addSpacer()
-				let Diff1stText = Stack1Diff.addText("+" + Diff1st.toLocaleString('de-DE'))
-					Diff1stText.textColor  = SubTextColor
-					Diff1stText.font = Font.systemFont(12)
-				Stack1Diff.addSpacer()
-			Stack1.addSpacer(4)
-			const Stack1Percent = Stack1.addStack()	
-			Stack1Percent.layoutHorizontally()
-			Stack1Percent.centerAlignContent()
-			Stack1Percent.addSpacer()
-				let Quote1stText = Stack1Percent.addText((Quote1st.toLocaleString('de-DE')).replace('.', ','))
-					Quote1stText.textColor = MainTextColor
-					Quote1stText.font = Font.boldSystemFont(28)
-					Quote1stEin = Stack1Percent.addText("%")
-					Quote1stEin.textColor = SubTextColor
-					Quote1stEin.font = Font.systemFont(14)	
-			Stack1Percent.addSpacer()		
-		Stack1.addSpacer()
+	const Stack1 = Content.addStack() 
+		Stack1.layoutVertically()
+		Stack1.backgroundColor = ContentBGColor		
+		Stack1.cornerRadius = 4
+		Stack1.setPadding(4,4,4,4)
+		const Stack1Head = Stack1.addStack() 	
+			Stack1Head.addSpacer()
+			let Title1stText = Stack1Head.addText("Vollständig")
+				Title1stText.textColor = MainTextColor
+				Title1stText.font = Font.boldSystemFont(14)
+			Stack1Head.addSpacer()
+		Stack1.addSpacer(4)
+		const Stack1Vacc = Stack1.addStack()
+			Stack1Vacc.addSpacer()
+			let VaccFullText = Stack1Vacc.addText(VaccFull.toLocaleString('de-DE'))
+				VaccFullText.textColor = MainTextColor
+				VaccFullText.font = Font.boldSystemFont(14)
+			Stack1Vacc.addSpacer()	
+		const Stack1Diff = Stack1.addStack()
+			Stack1Diff.addSpacer()
+			let DiffFullText = Stack1Diff.addText("+" + DiffFull.toLocaleString('de-DE'))
+				DiffFullText.textColor  = SubTextColor
+				DiffFullText.font = Font.systemFont(12)
+			Stack1Diff.addSpacer()
+		Stack1.addSpacer(4)
+		const Stack1Percent = Stack1.addStack()	
+		Stack1Percent.layoutHorizontally()
+		Stack1Percent.centerAlignContent()
+		Stack1Percent.addSpacer()
+			let QuoteFullText = Stack1Percent.addText((QuoteFull.toLocaleString('de-DE')).replace('.', ','))
+				QuoteFullText.textColor = MainTextColor
+				QuoteFullText.font = Font.boldSystemFont(28)
+				QuoteFullEin = Stack1Percent.addText("%")
+				QuoteFullEin.textColor = SubTextColor
+				QuoteFullEin.font = Font.systemFont(14)	
+		Stack1Percent.addSpacer()		
+	Stack1.addSpacer()
 	Content.addSpacer()
 	const BarContent1 = Content.addStack() 
 	BarContent1.layoutVertically()	
-		const progressBar1st = BarContent1.addImage(creatProgress(Quote1st))
+		const progressBar1st = BarContent1.addImage(creatProgress(QuoteFull))
 		progressBar1st.cornerRadius = 4
 		progressBar1st.imageSize = new Size(BarWidth, BarHeigth)
 
-	if (config.widgetFamily == 'medium') {	
-		Content.addSpacer()		
+	Content.addSpacer()		
 	
-		const BarContent2 = Content.addStack() 
-		BarContent2.layoutVertically()	
-			const progressBar2nd = BarContent2.addImage(creatProgress(Quote2nd))
-			progressBar2nd.cornerRadius = 4
-			progressBar2nd.imageSize = new Size(BarWidth, BarHeigth)
-		Content.addSpacer()		
-			const Stack2 = Content.addStack() 
-				Stack2.layoutVertically()
-				Stack2.backgroundColor = ContentBGColor		
-				Stack2.cornerRadius = 4
-				Stack2.setPadding(4,4,4,4)
-				const Stack2Head = Stack2.addStack() 	
-					Stack2Head.addSpacer()
-					let Title2ndText = Stack2Head.addText("Zweitimpfung")
-						Title2ndText.textColor = MainTextColor
-						Title2ndText.font = Font.boldSystemFont(14)
-					Stack2Head.addSpacer()
-				Stack2.addSpacer(4)
-				const Stack2Vacc = Stack2.addStack()
-					Stack2Vacc.addSpacer()
-					let Vacc2ndText = Stack2Vacc.addText(Vacc2nd.toLocaleString('de-DE'))
-						Vacc2ndText.textColor = MainTextColor
-						Vacc2ndText.font = Font.boldSystemFont(14)
-					Stack2Vacc.addSpacer()	
-				const Stack2Diff = Stack2.addStack()
-					Stack2Diff.addSpacer()
-					let Diff2ndText = Stack2Diff.addText("+" + Diff2nd.toLocaleString('de-DE'))
-						Diff2ndText.textColor  = SubTextColor
-						Diff2ndText.font = Font.systemFont(12)
-					Stack2Diff.addSpacer()
-				Stack2.addSpacer(4)
-				const Stack2Percent = Stack2.addStack()	
-				Stack2Percent.layoutHorizontally()
-				Stack2Percent.centerAlignContent()
-				Stack2Percent.addSpacer()
-					let Quote2ndText = Stack2Percent.addText((Quote2nd.toLocaleString('de-DE')).replace('.', ','))
-						Quote2ndText.textColor = MainTextColor
-						Quote2ndText.font = Font.boldSystemFont(28)
-						Quote2ndEin = Stack2Percent.addText("%")
-						Quote2ndEin.textColor = SubTextColor
-						Quote2ndEin.font = Font.systemFont(14)	
-				Stack2Percent.addSpacer()		
-			Stack2.addSpacer()
-	}
+	const BarContent2 = Content.addStack() 
+	BarContent2.layoutVertically()	
+		const progressBar2nd = BarContent2.addImage(creatProgress(QuoteBooster))
+		progressBar2nd.cornerRadius = 4
+		progressBar2nd.imageSize = new Size(BarWidth, BarHeigth)
+	Content.addSpacer()		
+		const Stack2 = Content.addStack() 
+			Stack2.layoutVertically()
+			Stack2.backgroundColor = ContentBGColor		
+			Stack2.cornerRadius = 4
+			Stack2.setPadding(4,4,4,4)
+			const Stack2Head = Stack2.addStack() 	
+				Stack2Head.addSpacer()
+				let Title2ndText = Stack2Head.addText("Auffrischung")
+					Title2ndText.textColor = MainTextColor
+					Title2ndText.font = Font.boldSystemFont(14)
+				Stack2Head.addSpacer()
+			Stack2.addSpacer(4)
+			const Stack2Vacc = Stack2.addStack()
+				Stack2Vacc.addSpacer()
+				let VaccBoosterText = Stack2Vacc.addText(VaccBooster.toLocaleString('de-DE'))
+					VaccBoosterText.textColor = MainTextColor
+					VaccBoosterText.font = Font.boldSystemFont(14)
+				Stack2Vacc.addSpacer()	
+			const Stack2Diff = Stack2.addStack()
+				Stack2Diff.addSpacer()
+				let DiffBoosterText = Stack2Diff.addText("+" + DiffBooster.toLocaleString('de-DE'))
+					DiffBoosterText.textColor  = SubTextColor
+					DiffBoosterText.font = Font.systemFont(12)
+				Stack2Diff.addSpacer()
+			Stack2.addSpacer(4)
+			const Stack2Percent = Stack2.addStack()	
+			Stack2Percent.layoutHorizontally()
+			Stack2Percent.centerAlignContent()
+			Stack2Percent.addSpacer()
+				let QuoteBoosterText = Stack2Percent.addText((QuoteBooster.toLocaleString('de-DE')).replace('.', ','))
+					QuoteBoosterText.textColor = MainTextColor
+					QuoteBoosterText.font = Font.boldSystemFont(28)
+					QuoteBoosterEin = Stack2Percent.addText("%")
+					QuoteBoosterEin.textColor = SubTextColor
+					QuoteBoosterEin.font = Font.systemFont(14)	
+			Stack2Percent.addSpacer()		
+		Stack2.addSpacer()
+
 	// Ausgabe		
 	if (!config.runsInWidget) {
-		  switch (config.widgetFamily) {
-			case 'small': await widget.presentSmall(); break;
-			case 'medium': await widget.presentMedium(); break;
-		  }
-		} else {
-		  Script.setWidget(widget)
-		}
-		Script.complete()
+		await widget.presentMedium()
+	} else {
+		Script.setWidget(widget)
+	}
+	Script.complete()
 }
 
 //
