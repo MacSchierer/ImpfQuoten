@@ -2,9 +2,8 @@
 Ein Scriptable Widget zur Anzeige der gegen COVID-19 geimpften Personenzahl.
 Die Quote der Geimpften mit Bezug auf die Bevölkerung von Deutschland oder eines gewählten Bundeslands.<br/>
 Zusätzlich werden die Zahlen mit einem Fortschrittsbalken visualisiert.<br/><br/>
-<img src="/img/pic1.PNG" width="400" /> &nbsp; <img src="img/pic3.PNG" width="400" /><br/><br/>
-<img src="img/pic5.png" width="250" /><br/><br/>
-Zahlen zur Erst- und Zweitimpfung mit je:<br/>
+<img src="/img/pic3.png" width="400" /> &nbsp; <img src="img/pic4.png" width="400" /><br/><br/>
+Zahlen zu vollständig Geimpften und Auffrischimpfungen (Booster):<br/>
 - Anzahl der Geimpften <br/>
 - Differenz zum Vortag <br/>
 - Prozentsatz mit Bezug auf die Bevölkerung<br/>
@@ -15,7 +14,7 @@ Zahlen zur Erst- und Zweitimpfung mit je:<br/>
 * Download/Import der ImpfQuoten.js Datei nach iCloud/Scriptable
 * Auf dem Homescreen ein neues mittleres Scriptable Widget erstellen - Parameter für Bundesland optional<br/>
 <img src="img/widget1.png" width="300" /> &nbsp; <img src="img/widget2.png" width="300" /><br/><br/>
-Das Skript ist aktuell für die mittlere Widgetgröße ausgelegt und wurde auf einem iPhone 12Pro, Xs getestet.
+Das Skript ist aktuell für die mittlere Widgetgröße ausgelegt und wurde auf einem iPhone 12Pro, Xs getestet.<br/>
 Auf anderen Geräten oder Widgetgrößen kann es ggf. zu Abweichungen in der Darstellung kommen.
 
 ## Features
@@ -24,7 +23,7 @@ Auf anderen Geräten oder Widgetgrößen kann es ggf. zu Abweichungen in der Dar
 * Als Basis der Quelle dient: https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/Impfquoten-Tab.html
 * Über den Parameter des Widgets kann ein Bundesland vorgegben werden. Kürzel nach ISO 3166-2:DE
 * Wechselt gemäß der Geräteeinstellung automatisch in den Darkmode
-* Individuelle Farbstufen für die Impfquote: Rot = Step1st < 25%, Grün = Step2nd > 60%, Dazwischen Orange, Ziel = 70% Herdenimunität
+* Individuelle Farbstufen für die Impfquote: Rot = Step1st < 25, Grün = Step2nd > 85, Dazwischen Orange, Ziel > 85 = "Herdenimmunität"
 
 ## Kürzel für den Parameter des Widgets
 BW = Baden-Württemberg<br/>
@@ -45,9 +44,8 @@ SH = Schleswig-Holstein<br/>
 TH = Thüringen<br/>
 
 
-## Beispiele
-<img src="img/pic2.PNG" width="400" /> &nbsp; <img src="img/pic4.PNG" width="400" /><br/><br/>
-<img src="img/pic5.png" width="250" /> &nbsp; <img src="img/pic6.png" width="250" /> 
+## Beispiele Darkmode
+<img src="img/pic2.png" width="400" /> &nbsp; <img src="img/pic1.png" width="400" /><br/><br/>
 ## Bekannte Probleme
 
 * Fortschrittsbalken wechselt nicht direkt in das zugehörige Erscheinungsbild (hell/dunkel)
