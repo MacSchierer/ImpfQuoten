@@ -44,8 +44,9 @@ SH = Schleswig-Holstein<br/>
 TH = Thüringen<br/>
 
 
-## Beispiele Darkmode
+## Beispiele
 <img src="img/pic2.png" width="400" /> &nbsp; <img src="img/pic1.png" width="400" /><br/><br/>
+<img src="img/pic5.png" width="400" /> &nbsp; <img src="img/pic6.png" width="400" /><br/><br/>
 ## Bekannte Probleme
 
 * Fortschrittsbalken wechselt nicht direkt in das zugehörige Erscheinungsbild (hell/dunkel)
@@ -53,6 +54,7 @@ TH = Thüringen<br/>
 <img src="img/error.png" width="400" /><br/><br/>
 
 ## Changelog
+* v2.1 Fix %-Zeichen, Erstimpfungen werden im linken Fortschirttsbalken schattiert im Hintergrund dargestellt
 * v2.0 Anzeige: Impfquote vollständig geimpft, Impfquote Auffrischimpfung 
 * v1.3 Impfquoten angepasst, API V2 - https://github.com/ThisIsBenny/rki-vaccination-data
 * v1.2 Kleine Korrekturen: Farben, Dezimaltrenner
