@@ -8,8 +8,9 @@
 // Zusätzlich werden die Zahlen mit einem Fortschrittsbalken visualisiert.
 // Konfiguriert als Widget Medium. Schaltet automatisch auch in den DarkMode.
 //
-// Script by MacSchierer, 26.11.2021, v2.0
+// Script by MacSchierer, 27.11.2021, v2.1
 // Download der aktuellen Version hier: GitHub https://github.com/MacSchierer/ImpfQuote
+// https://fckaf.de/Bn0
 // 
 // Verwendet die bereitgestellte JSON API von ThisIsBenny GitHub
 // https://github.com/ThisIsBenny/rki-vaccination-data
@@ -66,6 +67,7 @@ try {
 	Citizen = AllItems.data[MyKey[0]].inhabitants
 	VaccFull = AllItems.data[MyKey[0]].fullyVaccinated.doses
 	VaccBooster = AllItems.data[MyKey[0]].boosterVaccinated.doses
+	Quote1st = AllItems.data[MyKey[0]].vaccinatedAtLeastOnce.quote
 	QuoteFull = AllItems.data[MyKey[0]].fullyVaccinated.quote
 	QuoteBooster = AllItems.data[MyKey[0]].boosterVaccinated.quote
 	DiffFull = AllItems.data[MyKey[0]].fullyVaccinated.differenceToThePreviousDay
@@ -76,8 +78,9 @@ try {
 	log("Region: " + RegionName)
 	log("Vollständig geimpft: " + VaccFull)
 	log("Auffrischimpfung: " + VaccBooster)
-	log("Diff. 1st: +" + DiffFull)
-	log("Diff. 2nd: +" + DiffBooster)
+	log("Diff. Voll: +" + DiffFull)
+	log("Diff. Booster: +" + DiffBooster)
+	log("Quote 1st: " + Quote1st + "%")
 	log("Quote Full: " + QuoteFull + "%")
 	log("Quote Booster: " + QuoteBooster + "%")
 	log("Stand: " + AllItems.lastUpdate)
@@ -170,7 +173,7 @@ if (hasError == true) {
 	Content.addSpacer()
 	const BarContent1 = Content.addStack() 
 	BarContent1.layoutVertically()	
-		const progressBar1st = BarContent1.addImage(creatProgress(QuoteFull))
+		const progressBar1st = BarContent1.addImage(creatProgress(QuoteFull, Quote1st))
 		progressBar1st.cornerRadius = 4
 		progressBar1st.imageSize = new Size(BarWidth, BarHeigth)
 
@@ -178,7 +181,7 @@ if (hasError == true) {
 	
 	const BarContent2 = Content.addStack() 
 	BarContent2.layoutVertically()	
-		const progressBar2nd = BarContent2.addImage(creatProgress(QuoteBooster))
+		const progressBar2nd = BarContent2.addImage(creatProgress(QuoteBooster, 0))
 		progressBar2nd.cornerRadius = 4
 		progressBar2nd.imageSize = new Size(BarWidth, BarHeigth)
 	Content.addSpacer()		
@@ -262,8 +265,9 @@ async function loadItems(APIurl) {
 	return json
 }
 
-function creatProgress(BarValue) {
-	BarValue = Math.round(BarValue)
+function creatProgress(BarValue1, BarValue2) {
+	BarValue1 = Math.round(BarValue1)
+	BarValue2 = Math.round(BarValue2)
 	const context = new DrawContext()
 	context.size = new Size(BarWidth, BarHeigth)
 	context.opaque = false
@@ -274,30 +278,42 @@ function creatProgress(BarValue) {
 	context.addPath(path)
 	context.setFillColor(ContentBGColor)
 	context.fillPath()
-	// BarValue
-	if (BarValue < Step1st) {
-		BarColor = new Color("#bb1e10")
-	} 
-	if (BarValue >= Step1st && BarValue < Step2nd) {
-		BarColor = new Color("#f7b500")
-	} 
-	else if (BarValue >= Step2nd) {
-		BarColor = new Color("#00b347")
-	}
-	context.setFillColor(BarColor)  
+	// BarValue1
+	if (BarValue1 < Step1st) {BarColor1 = new Color("#bb1e10")}
+	if (BarValue2 < Step1st) {BarColor2 = new Color("#bb1e1075")} 
+	
+	if (BarValue1 >= Step1st && BarValue1 < Step2nd) {BarColor1 = new Color("#f7b500")}
+	else if (BarValue1 >= Step2nd) {BarColor1 = new Color("#00b347")}
+	
+	if (BarValue2 >= Step1st && BarValue2 < Step2nd) {BarColor2 = new Color("#f7b50075")} 
+	else if (BarValue2 >= Step2nd) {BarColor2 = new Color("#00b34775")}
+	
+	// BarValue2
+	context.setFillColor(BarColor2)  
+	const path2 = new Path()
+	const path2BarHeigth = (BarHeigth * (BarValue2 / StepFin) > BarHeigth) ? BarHeigth : BarHeigth * (BarValue2 / StepFin)
+	path2.addRoundedRect(new Rect(0, BarHeigth, BarWidth, -path2BarHeigth),2,2)
+	context.addPath(path2)
+	context.fillPath()
+	
+	// BarValue1
+	context.setFillColor(BarColor1)  
 	const path1 = new Path()
-	const path1BarHeigth = (BarHeigth * (BarValue / StepFin) > BarHeigth) ? BarHeigth : BarHeigth * (BarValue / StepFin)
+	const path1BarHeigth = (BarHeigth * (BarValue1 / StepFin) > BarHeigth) ? BarHeigth : BarHeigth * (BarValue1 / StepFin)
 	path1.addRoundedRect(new Rect(0, BarHeigth, BarWidth, -path1BarHeigth),2,2)
 	context.addPath(path1)
 	context.fillPath()
 	
 	context.setFont(Font.boldSystemFont(8))
-	context.setTextColor(SubTextColor)
 	context.setTextAlignedCenter()
-	if (BarValue < 65) {
-		context.drawTextInRect("%", new Rect(0, 2, BarWidth, BarHeigth))
+	if (BarValue1 < 90) {
+		context.setTextColor(SubTextColor)
+		context.drawTextInRect("%", new Rect(0, 3, BarWidth, BarHeigth))
+	} else {
+		context.setTextColor(BarTextColor1)
+		context.drawTextInRect("%", new Rect(0, BarHeigth-15, BarWidth, BarHeigth))
 	}
-	if (BarValue < 10) {
+	if (BarValue1 < 10) {
 		PosCorr = -10
 		context.setTextColor(BarTextColor2)
 	}
@@ -305,7 +321,7 @@ function creatProgress(BarValue) {
 		PosCorr = 2
 		context.setTextColor(BarTextColor1)
 	}
-	context.drawTextInRect(BarValue.toString(), new Rect(0, BarHeigth-path1BarHeigth+PosCorr, BarWidth, path1BarHeigth-PosCorr))
+	context.drawTextInRect(BarValue1.toString(), new Rect(0, BarHeigth-path1BarHeigth+PosCorr, BarWidth, path1BarHeigth-PosCorr))
 	return context.getImage()
 }
 
