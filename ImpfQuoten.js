@@ -1,6 +1,3 @@
-// Variables used by Scriptable.
-// These must be at the very top of the file. Do not edit.
-// icon-color: deep-green; icon-glyph: syringe;
 //
 // Script für https://scriptable.app
 // iOS Widget zur Anzeige der gegen COVID-19 geimpften Personenzahl. 
@@ -86,7 +83,8 @@ try {
 	log("Stand: " + AllItems.lastUpdate)
 } catch (e) {
 	hasError = true
-	ErrorTxt += "Beim Verarbeiten der Daten ist ein Fehler aufgetreten." 
+	ErrorTxt += "Beim Verarbeiten der Daten ist ein Fehler aufgetreten.\r\r" 
+   ErrorTxt += "API: " + AllItems.message
 }	
 
 // Fraben definieren	
