@@ -5,7 +5,7 @@
 // Zusätzlich werden die Zahlen mit einem Fortschrittsbalken visualisiert.
 // Konfiguriert als Widget Medium. Schaltet automatisch auch in den DarkMode.
 //
-// Script by MacSchierer, 27.11.2021, v2.1
+// Script by MacSchierer, 19.01.2022, v2.2
 // Download der aktuellen Version hier: GitHub https://github.com/MacSchierer/ImpfQuote
 // https://fckaf.de/Bn0
 // 
