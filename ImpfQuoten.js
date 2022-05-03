@@ -1,3 +1,6 @@
+// Variables used by Scriptable.
+// These must be at the very top of the file. Do not edit.
+// icon-color: deep-green; icon-glyph: syringe;
 //
 // Script für https://scriptable.app
 // iOS Widget zur Anzeige der gegen COVID-19 geimpften Personenzahl. 
@@ -5,13 +8,12 @@
 // Zusätzlich werden die Zahlen mit einem Fortschrittsbalken visualisiert.
 // Konfiguriert als Widget Medium. Schaltet automatisch auch in den DarkMode.
 //
-// Script by MacSchierer, 19.01.2022, v2.2
+// Script by MacSchierer, 03.05.2022, v2.3
 // Download der aktuellen Version hier: GitHub https://github.com/MacSchierer/ImpfQuote
 // https://fckaf.de/Bn0
 // 
-// Verwendet die bereitgestellte JSON API von ThisIsBenny GitHub
-// https://github.com/ThisIsBenny/rki-vaccination-data
-// Datenbasis: https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/Impfquoten-Tab.html
+// Verwendet die bereitgestellte Robert Koch-Institut COVID-19 API - von Marlon Lückert
+// https://api.corona-zahlen.org, https://github.com/marlon360/rki-covid-api
 
 //
 // Optionale Konfiguration
@@ -22,10 +24,12 @@ const Step1st = 25
 const Step2nd = 85
 const StepFin = 100
 
+debug = false
+
 //
 // Ab hier nichts ändern
 //
-let APIurl = "https://rki-vaccination-data.vercel.app/api/v2"
+let APIurl = "https://api.corona-zahlen.org/vaccinations"
 let hasError = false
 let ErrorTxt = ""  
 let RegionKey= "Deutschland"
@@ -34,11 +38,12 @@ const BarWidth = 15
 const BarHeigth = 105
 
 let param = args.widgetParameter 	// Abfrage des Parameters vom Widget
-//  param = "Mv" // Debug
+if (debug) {param = "de"}
 if (param != null && param.length > 0) {
-	param = param.toLowerCase()
+	param = param.toUpperCase()
 	if (setRegionKey(param) != false) {
 		RegionKey = setRegionKey(param)
+		RegionKey = param
 	}
 	else { 
 		hasError = true
@@ -54,37 +59,41 @@ try {
 }
 	
 try {
-	for (const key in AllItems.data) {
-		//console.log(`${key}: ${AllItems.data[key].name}`);
-		if (RegionKey == AllItems.data[key].name) {
-			MyKey = [key, AllItems.data[key].name]
-		}
+	if (RegionKey != "DE") {
+		RegItems = AllItems.data.states[RegionKey]
+		RegionName = RegItems.name
+	} else {
+		RegItems = AllItems.data
+		RegionName = "Deutschland"
 	}
-	// Daten der Region zuordnen
-	Citizen = AllItems.data[MyKey[0]].inhabitants
-	VaccFull = AllItems.data[MyKey[0]].fullyVaccinated.doses
-	VaccBooster = AllItems.data[MyKey[0]].boosterVaccinated.doses
-	Quote1st = AllItems.data[MyKey[0]].vaccinatedAtLeastOnce.quote
-	QuoteFull = AllItems.data[MyKey[0]].fullyVaccinated.quote
-	QuoteBooster = AllItems.data[MyKey[0]].boosterVaccinated.quote
-	DiffFull = AllItems.data[MyKey[0]].fullyVaccinated.differenceToThePreviousDay
-	DiffBooster = AllItems.data[MyKey[0]].boosterVaccinated.differenceToThePreviousDay
-	RegionName = MyKey[1]
 
+	// Daten zuordnen
+	Vacc1st = RegItems.vaccinated
+	QuoteVacc1st = RegItems.quote*100
+	DeltaVacc1st = RegItems.delta
+	Vacc2nd = RegItems.secondVaccination.vaccinated
+	QuoteVacc2nd = RegItems.secondVaccination.quote*100
+	DeltaVacc2nd = RegItems.secondVaccination.delta
+	Booster1st = RegItems.boosterVaccination.vaccinated
+	QuoteBooster1st = RegItems.boosterVaccination.quote*100
+	DeltaBooster1st = RegItems.boosterVaccination.delta
+	Booster2nd = RegItems['2ndBoosterVaccination'].vaccinated
+	QuoteBooster2nd = RegItems['2ndBoosterVaccination'].quote*100
+	DeltaBooster2nd = RegItems['2ndBoosterVaccination'].delta
+	
+	if(debug){
+		log("Region: " + RegionName)
+		log("Vacc1st: " + Vacc1st + ", " + QuoteVacc1st + ", "  +  DeltaVacc1st)
+		log("Vacc2nd: " + Vacc2nd + ", " + QuoteVacc2nd + ", "  +  DeltaVacc2nd)
+		log("Booster1st: " + Booster1st + ", " + QuoteBooster1st + ", "  +  DeltaBooster1st)
+		log("Booster2nd: " + Booster2nd + ", " + QuoteBooster2nd + ", "  +  DeltaBooster2nd)
+		log("Stand: " + AllItems.meta.lastCheckedForUpdate)
+	}
 
-	log("Region: " + RegionName)
-	log("Vollständig geimpft: " + VaccFull)
-	log("Auffrischimpfung: " + VaccBooster)
-	log("Diff. Voll: +" + DiffFull)
-	log("Diff. Booster: +" + DiffBooster)
-	log("Quote 1st: " + Quote1st + "%")
-	log("Quote Full: " + QuoteFull + "%")
-	log("Quote Booster: " + QuoteBooster + "%")
-	log("Stand: " + AllItems.lastUpdate)
 } catch (e) {
 	hasError = true
 	ErrorTxt += "Beim Verarbeiten der Daten ist ein Fehler aufgetreten.\r\r" 
-   ErrorTxt += "API: " + AllItems.message
+    ErrorTxt += "API: " + AllItems.message
 }	
 
 // Fraben definieren	
@@ -116,7 +125,7 @@ if (hasError == true) {
 	Title.addSpacer()	
 	widget.borderWidth = 1
 	widget.borderColor = MainTextColor
-	let DateText = Title.addDate(new Date(AllItems.lastUpdate))
+	let DateText = Title.addDate(new Date(AllItems.meta.lastCheckedForUpdate))
 		DateText.textColor = SubTextColor
 		DateText.applyDateStyle()
 		DateText.font = Font.boldSystemFont(8)		
@@ -145,13 +154,13 @@ if (hasError == true) {
 		Stack1.addSpacer(4)
 		const Stack1Vacc = Stack1.addStack()
 			Stack1Vacc.addSpacer()
-			let VaccFullText = Stack1Vacc.addText(VaccFull.toLocaleString('de-DE'))
+			let VaccFullText = Stack1Vacc.addText(Vacc2nd.toLocaleString('de-DE'))
 				VaccFullText.textColor = MainTextColor
 				VaccFullText.font = Font.boldSystemFont(14)
 			Stack1Vacc.addSpacer()	
 		const Stack1Diff = Stack1.addStack()
 			Stack1Diff.addSpacer()
-			let DiffFullText = Stack1Diff.addText("+" + DiffFull.toLocaleString('de-DE'))
+			let DiffFullText = Stack1Diff.addText("+" + DeltaVacc2nd.toLocaleString('de-DE'))
 				DiffFullText.textColor  = SubTextColor
 				DiffFullText.font = Font.systemFont(12)
 			Stack1Diff.addSpacer()
@@ -160,7 +169,7 @@ if (hasError == true) {
 		Stack1Percent.layoutHorizontally()
 		Stack1Percent.centerAlignContent()
 		Stack1Percent.addSpacer()
-			let QuoteFullText = Stack1Percent.addText((QuoteFull.toLocaleString('de-DE')).replace('.', ','))
+			let QuoteFullText = Stack1Percent.addText((QuoteVacc2nd.toLocaleString('de-DE')).replace('.', ','))
 				QuoteFullText.textColor = MainTextColor
 				QuoteFullText.font = Font.boldSystemFont(28)
 				QuoteFullEin = Stack1Percent.addText("%")
@@ -171,7 +180,7 @@ if (hasError == true) {
 	Content.addSpacer()
 	const BarContent1 = Content.addStack() 
 	BarContent1.layoutVertically()	
-		const progressBar1st = BarContent1.addImage(creatProgress(QuoteFull, Quote1st))
+		const progressBar1st = BarContent1.addImage(creatProgress(QuoteVacc2nd, QuoteVacc1st))
 		progressBar1st.cornerRadius = 4
 		progressBar1st.imageSize = new Size(BarWidth, BarHeigth)
 
@@ -179,7 +188,7 @@ if (hasError == true) {
 	
 	const BarContent2 = Content.addStack() 
 	BarContent2.layoutVertically()	
-		const progressBar2nd = BarContent2.addImage(creatProgress(QuoteBooster, 0))
+		const progressBar2nd = BarContent2.addImage(creatProgress(QuoteBooster1st, QuoteBooster2nd))
 		progressBar2nd.cornerRadius = 4
 		progressBar2nd.imageSize = new Size(BarWidth, BarHeigth)
 	Content.addSpacer()		
@@ -197,13 +206,13 @@ if (hasError == true) {
 			Stack2.addSpacer(4)
 			const Stack2Vacc = Stack2.addStack()
 				Stack2Vacc.addSpacer()
-				let VaccBoosterText = Stack2Vacc.addText(VaccBooster.toLocaleString('de-DE'))
+				let VaccBoosterText = Stack2Vacc.addText(Booster1st.toLocaleString('de-DE'))
 					VaccBoosterText.textColor = MainTextColor
 					VaccBoosterText.font = Font.boldSystemFont(14)
 				Stack2Vacc.addSpacer()	
 			const Stack2Diff = Stack2.addStack()
 				Stack2Diff.addSpacer()
-				let DiffBoosterText = Stack2Diff.addText("+" + DiffBooster.toLocaleString('de-DE'))
+				let DiffBoosterText = Stack2Diff.addText("+" + DeltaBooster1st.toLocaleString('de-DE'))
 					DiffBoosterText.textColor  = SubTextColor
 					DiffBoosterText.font = Font.systemFont(12)
 				Stack2Diff.addSpacer()
@@ -212,7 +221,7 @@ if (hasError == true) {
 			Stack2Percent.layoutHorizontally()
 			Stack2Percent.centerAlignContent()
 			Stack2Percent.addSpacer()
-				let QuoteBoosterText = Stack2Percent.addText((QuoteBooster.toLocaleString('de-DE')).replace('.', ','))
+				let QuoteBoosterText = Stack2Percent.addText((QuoteBooster1st.toLocaleString('de-DE')).replace('.', ','))
 					QuoteBoosterText.textColor = MainTextColor
 					QuoteBoosterText.font = Font.boldSystemFont(28)
 					QuoteBoosterEin = Stack2Percent.addText("%")
@@ -327,7 +336,7 @@ function creatProgress(BarValue1, BarValue2) {
 // Regionen und Widgetparameter
 //
 function setRegionKey(Region) {
-	let Regions = { bw: "Baden-Württemberg", by: "Bayern", be: "Berlin", bb: "Brandenburg", hb: "Bremen", hh: "Hamburg", he: "Hessen", mv: "Mecklenburg-Vorpommern", ni: "Niedersachsen", nw: "Nordrhein-Westfalen", rp: "Rheinland-Pfalz", sl: "Saarland", sn: "Sachsen", st: "Sachsen-Anhalt", sh: "Schleswig-Holstein", th: "Thüringen" };
+	let Regions = { BW: "Baden-Württemberg", BY: "Bayern", BE: "Berlin", BB: "Brandenburg", HB: "Bremen", HH: "Hamburg", HE: "Hessen", MV: "Mecklenburg-Vorpommern", NI: "Niedersachsen", NW: "Nordrhein-Westfalen", RP: "Rheinland-Pfalz", SL: "Saarland", SN: "Sachsen", ST: "Sachsen-Anhalt", SH: "Schleswig-Holstein", TH: "Thüringen", DE: "Deutschland" };
 	if (Regions.hasOwnProperty(Region)) { 
 		result = Regions[Region]
 	} else { 
