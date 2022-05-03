@@ -19,8 +19,7 @@ Auf anderen Geräten oder Widgetgrößen kann es ggf. zu Abweichungen in der Dar
 
 ## Features
 
-* Quelle der Daten: https://rki-vaccination-data.vercel.app
-* Als Basis der Quelle dient: https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/Impfquoten-Tab.html
+* Quelle der Daten: Robert Koch-Institut COVID-19 API - von Marlon Lückert >> https://api.corona-zahlen.org
 * Über den Parameter des Widgets kann ein Bundesland vorgegben werden. Kürzel nach ISO 3166-2:DE
 * Wechselt gemäß der Geräteeinstellung automatisch in den Darkmode
 * Individuelle Farbstufen für die Impfquote: Rot = Step1st < 25, Grün = Step2nd > 85, Dazwischen Orange, Ziel > 85 = "Herdenimmunität"
@@ -42,6 +41,7 @@ SN = Sachsen<br/>
 ST = Sachsen-Anhalt<br/>
 SH = Schleswig-Holstein<br/>
 TH = Thüringen<br/>
+DE = Deutschland
 
 
 ## Beispiele
@@ -54,6 +54,7 @@ TH = Thüringen<br/>
 <img src="img/error.png" width="400" /><br/><br/>
 
 ## Changelog
+* v2.3 Neue API >> Robert Koch-Institut COVID-19 API - von Marlon Lückert
 * v2.1 Fix %-Zeichen, Erstimpfungen werden im linken Fortschirttsbalken schattiert im Hintergrund dargestellt
 * v2.0 Anzeige: Impfquote vollständig geimpft, Impfquote Auffrischimpfung 
 * v1.3 Impfquoten angepasst, API V2 - https://github.com/ThisIsBenny/rki-vaccination-data
@@ -62,7 +63,5 @@ TH = Thüringen<br/>
 * v1.0 Release GitHub
 
 ## Hinweis zur Quelle und Datenstand
-Die Daten werden werktäglich aktualisiert und stehen hier öffentlich zur Verfügung:
-https://www.rki.de/DE/Content/InfAZ/N/Neuartiges_Coronavirus/Daten/Impfquoten-Tab.html<br/>
-Es wird ebenfalls darauf hingewiesen, dass die Zahlen nachträglich korrigiert werden können.
-Der Abruf erfolgt nicht direkt beim RKI sondern über einen kleinen Umweg: https://rki-vaccination-data.vercel.app <br/>
+Verwendet die bereitgestellte Robert Koch-Institut COVID-19 API - von Marlon Lückert<br/>
+https://api.corona-zahlen.org, https://github.com/marlon360/rki-covid-api<br/>
